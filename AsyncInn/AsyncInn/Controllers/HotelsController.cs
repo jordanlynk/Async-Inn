@@ -7,104 +7,75 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AsyncInn.Data;
 using AsyncInn.Models;
+using AsyncInn.Models.Interfaces;
 
 namespace AsyncInn.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class HotelsController : ControllerBase
-    {
-        private readonly AsyncInnDbContext _context;
 
-        public HotelsController(AsyncInnDbContext context)
+    {
+        private readonly IHotel _hotel;
+
+        public HotelsController(IHotel hotel)
         {
-            _context = context;
+            _hotel = hotel;
         }
 
         // GET: api/Hotels
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotels>>> GetHotels()
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels()
         {
-            return await _context.Hotels.ToListAsync();
+            return Ok(await _hotel.GetHotels());
         }
 
         // GET: api/Hotels/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Hotels>> GetHotels(int id)
+        public async Task<ActionResult<Hotel>> GetHotel(int id)
         {
-            var hotels = await _context.Hotels.FindAsync(id);
+            var hotel = await _hotel.GetHotel(id);
 
-            if (hotels == null)
+            if (hotel == null)
             {
                 return NotFound();
             }
 
-            return hotels;
+            return hotel;
         }
 
         // PUT: api/Hotels/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutHotels(int id, Hotels hotels)
+        public async Task<IActionResult> PutRoom(int id, Hotel hotels)
         {
             if (id != hotels.ID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(hotels).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HotelsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var updatedHotel = await _hotel.UpdateHotel(id, hotels);
+            return Ok(updatedHotel);
         }
 
         // POST: api/Hotels
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Hotels>> PostHotels(Hotels hotels)
+        public async Task<ActionResult<Hotel>> PostHotels(Hotel hotels)
         {
-            _context.Hotels.Add(hotels);
-            await _context.SaveChangesAsync();
-
+            await _hotel.Create(hotels);
             return CreatedAtAction("GetHotels", new { id = hotels.ID }, hotels);
         }
 
         // DELETE: api/Hotels/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Hotels>> DeleteHotels(int id)
+        public async Task<ActionResult<Hotel>> DeleteHotels(int id)
         {
-            var hotels = await _context.Hotels.FindAsync(id);
-            if (hotels == null)
-            {
-                return NotFound();
-            }
-
-            _context.Hotels.Remove(hotels);
-            await _context.SaveChangesAsync();
-
-            return hotels;
-        }
-
-        private bool HotelsExists(int id)
-        {
-            return _context.Hotels.Any(e => e.ID == id);
+            await _hotel.DeleteHotel(id);
+            return NoContent();
         }
     }
 }
+
