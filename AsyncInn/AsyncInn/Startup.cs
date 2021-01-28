@@ -34,6 +34,8 @@ namespace AsyncInn
                 options.UseSqlServer(connectionString);
             });
             services.AddTransient<IRoom, RoomRepository>();
+            services.AddTransient<IHotel, HotelsRepository>();
+            services.AddTransient<IAmenities, AmenitiesRepository>();
 
         }
 

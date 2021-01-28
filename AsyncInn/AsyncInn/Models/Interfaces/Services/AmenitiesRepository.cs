@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AsyncInn.Data;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,29 +9,43 @@ namespace AsyncInn.Models.Interfaces.Services
 {
     public class AmenitiesRepository : IAmenities
     {
-        public Task<Amenity> Create(Amenity amenity)
+        private AsyncInnDbContext _context;
+
+        public AmenitiesRepository(AsyncInnDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public async Task<Amenity> Create(Amenity amenity)
+        {
+            _context.Entry(amenity).State = EntityState.Added;
+            await _context.SaveChangesAsync();
+            return amenity;
         }
 
-        public Task DeleteAmenity(int Id)
+        public async Task<Amenity> GetAmenity(int Id)
         {
-            throw new NotImplementedException();
+            Amenity amenity = await _context.Amenities.FindAsync();
+            return amenity;
         }
 
-        public Task<Amenity> GetAmenity(int Id)
+        public async Task<List<Amenity>> GetAmenities()
         {
-            throw new NotImplementedException();
+            var amenity = await _context.Amenities.ToListAsync();
+            return amenity;
         }
 
-        public Task<List<Amenity>> GetHotels()
+        public async Task<Amenity> UpdateAmenity(int Id, Amenity amenity)
         {
-            throw new NotImplementedException();
+            _context.Entry(amenity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return amenity;
         }
 
-        public Task<Amenity> UpdateAmenity(int Id, Amenity amenity)
+        public async Task DeleteAmenity(int Id)
         {
-            throw new NotImplementedException();
+            Amenity amenity = await GetAmenity(Id);
+            _context.Entry(amenity).State = EntityState.Deleted;
+            await _context.SaveChangesAsync();
         }
     }
 }
