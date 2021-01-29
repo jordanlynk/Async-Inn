@@ -12,6 +12,7 @@ namespace AsyncInn.Data
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Amenity> Amenities { get; set; }
+        public DbSet<RoomAmenity> RoomAmenities { get; set; }
         public AsyncInnDbContext(DbContextOptions options) : base(options)
         {
 
@@ -27,7 +28,8 @@ namespace AsyncInn.Data
             modelBuilder.Entity<Amenity>().HasData(new Amenity { ID = 1, Name = "Mini Bar"});
             modelBuilder.Entity<Amenity>().HasData(new Amenity { ID = 2, Name = "Mini Fridge" });
             modelBuilder.Entity<Amenity>().HasData(new Amenity { ID = 3, Name = "Mini Shower" });
-
+            modelBuilder.Entity<RoomAmenity>().HasKey(RoomAmenity => new { RoomAmenity.AmenityID, RoomAmenity.RoomID }
+      );
         }
 
     }
