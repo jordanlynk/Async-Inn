@@ -50,17 +50,13 @@ namespace AsyncInn.Models.Interfaces.Services
         {
             return await _context.HotelRooms
                          .Where(h => h.HotelID == HotelId && h.RoomNumber == roomNumber)
-                         .Include(h => h.hotel)
-                         .ThenInclude(r => r.HotelRooms)
                          .FirstOrDefaultAsync();
         }
 
-        public async Task<List<HotelRoom>> GetHotelRooms(int HotelId, int roomNumber)
+        public async Task<List<HotelRoom>> GetHotelRooms(int HotelId)
         {
             return await _context.HotelRooms
-                         .Where(h => h.HotelID == HotelId && h.RoomNumber == roomNumber)
-                         .Include(h => h.hotel)
-                         .ThenInclude(r => r.HotelRooms)
+                         .Where(h => h.HotelID == HotelId)
                          .ToListAsync();
 
         }
