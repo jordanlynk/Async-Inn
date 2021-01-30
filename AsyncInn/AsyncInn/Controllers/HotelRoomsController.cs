@@ -30,7 +30,6 @@ namespace AsyncInn.Controllers
             return Ok(await _hotelRoom.GetHotelRooms(hotelId, roomNumber));
         }
 
-        // GET: api/HotelRooms/5
         [HttpGet("{id}")]
         [Route("/Hotels/{HotelID}/Rooms/{RoomID}")]
         public async Task<ActionResult<HotelRoom>> GetHotelRoom(int hotelId, int RoomNumber)
