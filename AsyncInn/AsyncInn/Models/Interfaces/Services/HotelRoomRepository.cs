@@ -10,12 +10,12 @@ namespace AsyncInn.Models.Interfaces.Services
     public class HotelRoomRepository : IHotelRoom
     {
         private readonly AsyncInnDbContext _context;
-        private readonly IRoom _rooms;
+        
 
         public HotelRoomRepository(AsyncInnDbContext context, IRoom rooms)
         {
             _context = context;
-            _rooms = rooms;
+           
         }
         public async Task AddRoomToHotel(int RoomID, int HotelID, int RoomNumber, bool PetFriendly, decimal Rate)
         {
@@ -46,24 +46,24 @@ namespace AsyncInn.Models.Interfaces.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<HotelRoom> GetHotelRoom(int HotelId, int roomNumber)
+        public async Task<HotelRoom> GetHotelRoom(int hotelId, int roomNumber)
         {
             return await _context.HotelRooms
-                         .Where(h => h.HotelID == HotelId && h.RoomNumber == roomNumber)
-                         .FirstOrDefaultAsync();
+                            .Where(h => h.HotelID == hotelId && h.RoomNumber == roomNumber)
+                                .FirstOrDefaultAsync();
         }
 
         public async Task<List<HotelRoom>> GetHotelRooms(int HotelId)
         {
             return await _context.HotelRooms
-                         .Where(h => h.HotelID == HotelId)
-                         .ToListAsync();
+                            .Where(h => h.HotelID == HotelId)
+                                .ToListAsync();
 
         }
 
-        public async Task RemoveRoomFromHotel(int RoomID, int HotelID)
+        public async Task RemoveRoomFromHotel(int roomNumber, int hotelID)
         {
-            var result = await _context.HotelRooms.FirstOrDefaultAsync(x => x.HotelID == HotelID && x.RoomID == RoomID );
+            var result = await _context.HotelRooms.FirstOrDefaultAsync(x => x.HotelID == hotelID && x.RoomNumber == roomNumber );
 
             _context.Entry(result).State = EntityState.Deleted;
 
