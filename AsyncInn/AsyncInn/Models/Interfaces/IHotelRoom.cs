@@ -13,6 +13,6 @@ namespace AsyncInn.Models.Interfaces
         Task<HotelRoom> UpdateHotelRoom(HotelRoom hotelRoom);
         Task DeleteHotelRoom(int hotelId, int roomNumber);
         Task AddRoomToHotel(int roomID, int hotelID, int roomNumber, bool PetFriendly, decimal Rate);
-        Task RemoveRoomFromHotel(int roomID, int hotelID);
+        Task RemoveRoomFromHotel(int roomNumber, int hotelID);
     }
 }

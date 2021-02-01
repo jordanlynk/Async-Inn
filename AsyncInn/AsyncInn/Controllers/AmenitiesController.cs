@@ -15,9 +15,9 @@ namespace AsyncInn.Controllers
     [ApiController]
     public class AmenitiesController : ControllerBase
     {
-        private readonly IAmenities _amenity;
+        private readonly IAmenity _amenity;
 
-        public AmenitiesController(IAmenities amenity)
+        public AmenitiesController(IAmenity amenity)
         {
             _amenity = amenity;
         }
@@ -63,8 +63,8 @@ namespace AsyncInn.Controllers
         [HttpPost]
         public async Task<ActionResult<Amenity>> PostAmenity(Amenity amenity)
         {
-            await _amenity.Create(amenity);
-            return CreatedAtAction("GetAmenities", new { id = amenity.ID }, amenity);
+            await _amenity.CreateAmenity(amenity);
+            return CreatedAtAction("GetAmenity", new { id = amenity.ID }, amenity);
 
         }
 
