@@ -12,7 +12,7 @@ namespace AsyncInn.Models.Interfaces.Services
         private readonly AsyncInnDbContext _context;
         
 
-        public HotelRoomRepository(AsyncInnDbContext context, IRoom rooms)
+        public HotelRoomRepository(AsyncInnDbContext context)
         {
             _context = context;
            

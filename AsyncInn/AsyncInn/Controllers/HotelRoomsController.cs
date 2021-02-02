@@ -24,15 +24,16 @@ namespace AsyncInn.Controllers
 
         // GET: api/HotelRooms
         [HttpGet]
-        [Route("/Hotels/{hotelID}/Rooms")]
+        [Route("Hotels/{hotelID}/Rooms")]
         public async Task<ActionResult<IEnumerable<HotelRoom>>> GetHotelRooms(int hotelId)
         {
             var hotelRoom = await _hotelRoom.GetHotelRooms(hotelId);
-            return Ok(hotelRoom);
+            return hotelRoom;
+            
         }
 
         [HttpGet]
-        [Route("/Hotels/{hotelID}/Rooms/{roomNumber}")]
+        [Route("Hotels/{hotelID}/Rooms/{roomNumber}")]
         public async Task<ActionResult<HotelRoom>> GetHotelRoom(int hotelId, int roomNumber)
         {
             var hotelRoom = await _hotelRoom.GetHotelRoom(hotelId, roomNumber);
@@ -49,7 +50,7 @@ namespace AsyncInn.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut]
-        [Route("/Hotels/{hotelID}/Rooms/{roomNumber}")]
+        [Route("Hotels/{hotelID}/Rooms/{roomNumber}")]
         public async Task<IActionResult> PutHotelRoom(HotelRoom hotelRoom)
         {
             var updatedHotelRoom = await _hotelRoom.UpdateHotelRoom(hotelRoom);
@@ -76,7 +77,7 @@ namespace AsyncInn.Controllers
         }
 
         [HttpPost]
-        [Route("/Hotels{hotelID}/Rooms")]
+        [Route("Hotels{hotelID}/Rooms")]
 
         public async Task<IActionResult> AddRoomToHotel(int RoomID, int HotelID, int RoomNumber, bool PetFriendly, decimal Rate)
         {
