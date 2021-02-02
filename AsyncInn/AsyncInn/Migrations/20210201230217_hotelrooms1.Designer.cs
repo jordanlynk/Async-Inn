@@ -4,14 +4,16 @@ using AsyncInn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AsyncInn.Migrations
 {
     [DbContext(typeof(AsyncInnDbContext))]
-    partial class AsyncInnDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210201230217_hotelrooms1")]
+    partial class hotelrooms1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,7 +120,7 @@ namespace AsyncInn.Migrations
                     b.Property<int>("HotelID")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoomNumber")
+                    b.Property<int>("RoomID")
                         .HasColumnType("int");
 
                     b.Property<int?>("AmenityID")
@@ -130,10 +132,10 @@ namespace AsyncInn.Migrations
                     b.Property<decimal>("Rate")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("RoomID")
+                    b.Property<int>("RoomNumber")
                         .HasColumnType("int");
 
-                    b.HasKey("HotelID", "RoomNumber");
+                    b.HasKey("HotelID", "RoomID");
 
                     b.HasIndex("AmenityID");
 
@@ -145,26 +147,26 @@ namespace AsyncInn.Migrations
                         new
                         {
                             HotelID = 1,
-                            RoomNumber = 23,
+                            RoomID = 1,
                             PetFriendly = true,
                             Rate = 100m,
-                            RoomID = 1
+                            RoomNumber = 23
                         },
                         new
                         {
                             HotelID = 2,
-                            RoomNumber = 69,
+                            RoomID = 2,
                             PetFriendly = true,
                             Rate = 169m,
-                            RoomID = 2
+                            RoomNumber = 69
                         },
                         new
                         {
                             HotelID = 3,
-                            RoomNumber = 88,
+                            RoomID = 3,
                             PetFriendly = false,
                             Rate = 170m,
-                            RoomID = 3
+                            RoomNumber = 88
                         });
                 });
 

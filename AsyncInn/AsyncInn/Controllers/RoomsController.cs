@@ -56,7 +56,7 @@ namespace AsyncInn.Controllers
 
             var updatedRoom = await _room.UpdateRoom(id, room);
             return Ok(updatedRoom);
-               
+
         }
 
         // POST: api/Rooms
@@ -68,7 +68,7 @@ namespace AsyncInn.Controllers
             await _room.Create(room);
             return CreatedAtAction("GetRoom", new { id = room.ID }, room);
 
-            
+
         }
 
         // DELETE: api/Rooms/5
@@ -79,5 +79,24 @@ namespace AsyncInn.Controllers
             return NoContent();
         }
 
+        [HttpPost]
+        [Route("{RoomID}/{AmenityID}")]
+
+        public async Task<IActionResult> AddAmenityToRoom(int RoomID, int amenityID)
+        {
+            await _room.AddAmenityToRoom(RoomID, amenityID);
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [Route("{RoomID}/{AmenityID}")]
+
+        public async Task<IActionResult> RemoveAmentityFromRoom(int roomId, int amenityId)
+        {
+            await _room.RemoveAmenity(roomId, amenityId);
+            return NoContent();
+        }
+
     }
 }
+

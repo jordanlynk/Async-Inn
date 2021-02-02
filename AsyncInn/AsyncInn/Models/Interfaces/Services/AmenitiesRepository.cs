@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace AsyncInn.Models.Interfaces.Services
 {
-    public class AmenitiesRepository : IAmenities
+    public class AmenitiesRepository : IAmenity
     {
-        private AsyncInnDbContext _context;
+        public AsyncInnDbContext _context;
 
         public AmenitiesRepository(AsyncInnDbContext context)
         {
             _context = context;
         }
-        public async Task<Amenity> Create(Amenity amenity)
+        public async Task<Amenity> CreateAmenity(Amenity amenity)
         {
             _context.Entry(amenity).State = EntityState.Added;
             await _context.SaveChangesAsync();
@@ -24,14 +24,18 @@ namespace AsyncInn.Models.Interfaces.Services
 
         public async Task<Amenity> GetAmenity(int Id)
         {
-            Amenity amenity = await _context.Amenities.FindAsync();
+            Amenity amenity = await _context.Amenities.FindAsync(Id);
+            var room = await _context.RoomAmenities.Where(x => x.AmenityID == Id)
+                                                   .Include(x => x.room)
+                                                   .ToListAsync();
+            amenity.RoomAmenities = room;
             return amenity;
         }
 
         public async Task<List<Amenity>> GetAmenities()
         {
-            var amenity = await _context.Amenities.ToListAsync();
-            return amenity;
+            var amenities = await _context.Amenities.ToListAsync();
+            return amenities;
         }
 
         public async Task<Amenity> UpdateAmenity(int Id, Amenity amenity)
