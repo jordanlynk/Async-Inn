@@ -38,8 +38,18 @@ namespace AsyncInn
             services.AddTransient<IAmenity, AmenitiesRepository>();
             services.AddTransient<IHotelRoom, HotelRoomRepository>();
 
-        }
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
+                {
+                    Title = "Async-Inn",
+                    Version = "v1"
 
+                });
+
+
+            });
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -49,13 +59,16 @@ namespace AsyncInn
             }
 
             app.UseRouting();
+            app.UseSwagger(options => {
+                options.RouteTemplate = "/api/{documentName}/swagger.json";
 
+            });
+            app.UseSwaggerUI(options => {
+                options.SwaggerEndpoint("/api/v1/swagger.json", "Async Inn");
+                options.RoutePrefix = "";
+            });
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
                 endpoints.MapControllers();
             });
         }
