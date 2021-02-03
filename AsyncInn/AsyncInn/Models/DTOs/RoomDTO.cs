@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AsyncInn.Models
+namespace AsyncInn.Models.DTOs
 {
-    public class Room
+    public class RoomDTO
     {
         public int ID { get; set; }
         public string Name { get; set; }
         public string Layout { get; set; }
-
-        public List<RoomAmenity> RoomAmenities { get; set; }
-        public List<HotelRoom> HotelRooms { get; set; }
+        public List<AmenityDTO> Amenities { get; set; }
     }
 }
