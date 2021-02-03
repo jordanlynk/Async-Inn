@@ -50,7 +50,7 @@ namespace AsyncInn.Models.Interfaces.Services
         {
             return await _context.HotelRooms
                             .Where(h => h.HotelID == hotelId && h.RoomNumber == roomNumber)
-                                .FirstOrDefaultAsync();
+                            .FirstOrDefaultAsync();
         }
 
         public async Task<List<HotelRoom>> GetHotelRooms(int HotelId)
