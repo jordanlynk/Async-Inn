@@ -1,4 +1,5 @@
 ﻿using AsyncInn.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AsyncInn.Data
 {
-    public class AsyncInnDbContext : DbContext
+    public class AsyncInnDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Room> Rooms { get; set; }
@@ -19,12 +20,16 @@ namespace AsyncInn.Data
         {
 
         }
+         
         /// <summary>
         /// Going to clean up this monster, but this is our seeding data and on lines 37/38 creating the key for the two that do not have their own primary key.
         /// </summary>
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
+
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Hotel>().HasData(new Hotel { ID = 1, Name = "Cozy Hotel", City = "Redmond", Country = "USA", PhoneNumber = "555-555-5555", State = "WA", StreetAddress = "6969 Apple Street" });
             modelBuilder.Entity<Hotel>().HasData(new Hotel { ID = 2, Name = "Rivendell Hotel", City = "New Orleans", Country = "USA", PhoneNumber = "555-555-5555", State = "LA", StreetAddress = "6969 Mardi Gras Street" });
             modelBuilder.Entity<Hotel>().HasData(new Hotel { ID = 3, Name = "Honey BBQ Hotel", City = "Nashville", Country = "USA", PhoneNumber = "555-555-5555", State = "TN", StreetAddress = "6969 Whiskey Street" });

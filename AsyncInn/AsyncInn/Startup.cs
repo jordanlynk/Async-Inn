@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using AsyncInn.Data;
 using AsyncInn.Models.Interfaces;
 using AsyncInn.Models.Interfaces.Services;
+using AsyncInn.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace AsyncInn
 {
@@ -33,10 +35,12 @@ namespace AsyncInn
                 string connectionString = Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
+
             services.AddTransient<IRoom, RoomRepository>();
             services.AddTransient<IHotel, HotelsRepository>();
             services.AddTransient<IAmenity, AmenitiesRepository>();
             services.AddTransient<IHotelRoom, HotelRoomRepository>();
+            services.AddTransient<IUserService, IdentityUserService>();
 
             services.AddSwaggerGen(options =>
             {
@@ -49,7 +53,15 @@ namespace AsyncInn
 
 
             });
-        }
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                // There are other options like this
+            })
+            .AddEntityFrameworkStores<AsyncInnDbContext>();
+
+            
+            }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
