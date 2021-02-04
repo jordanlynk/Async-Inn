@@ -56,9 +56,9 @@
 ![NoSuccess](./assets/incorrectpassword.png)
 
 ## Version
-1.0.0: Initial Release
-1.0.1: Applied Dependency Injection
-1.0.2: Applied join tables
-1.0.3: 
-1.0.4: Applied DTOs
-1.0.5: Applied User Account Database
+- 1.0.0: Initial Release
+- 1.0.1: Applied Dependency Injection
+- 1.0.2: Applied join tables
+- 1.0.3: 
+- 1.0.4: Applied DTOs
+- 1.0.5: Applied User Account Database
