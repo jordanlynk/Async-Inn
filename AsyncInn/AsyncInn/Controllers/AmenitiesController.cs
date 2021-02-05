@@ -9,6 +9,7 @@ using AsyncInn.Data;
 using AsyncInn.Models;
 using AsyncInn.Models.Interfaces;
 using AsyncInn.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AsyncInn.Controllers
 {
@@ -23,14 +24,14 @@ namespace AsyncInn.Controllers
             _amenity = amenity;
         }
 
-        // GET: api/Amenities
+        [Authorize(Policy = "See Amenities")]
         [HttpGet]
         public async Task<ActionResult<List<AmenityDTO>>> GetAmenities()
         {
             return Ok(await _amenity.GetAmenities());
         }
 
-        // GET: api/Amenities/5
+        [Authorize(Policy = "See Amenities")]
         [HttpGet("{id}")]
         public async Task<ActionResult<AmenityDTO>> GetAmenity(int id)
         {
@@ -44,9 +45,7 @@ namespace AsyncInn.Controllers
             return amenity;
         }
 
-        // PUT: api/Amenities/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [Authorize(Policy = "Update Amenity")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAmenity(int id, AmenityDTO amenity)
         {
@@ -59,9 +58,7 @@ namespace AsyncInn.Controllers
             return Ok(updatedAmenity);
         }
 
-        // POST: api/Amenities
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [Authorize(Policy = "Create Amenity")]
         [HttpPost]
         public async Task<ActionResult<AmenityDTO>> PostAmenity(AmenityDTO amenity)
         {
@@ -70,7 +67,7 @@ namespace AsyncInn.Controllers
 
         }
 
-        // DELETE: api/Amenities/5
+        [Authorize(Policy = "Delete Amenity")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Amenity>> DeleteAmenity(int id)
         {

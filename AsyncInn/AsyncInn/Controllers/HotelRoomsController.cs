@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AsyncInn.Data;
 using AsyncInn.Models;
 using AsyncInn.Models.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AsyncInn.Controllers
 {
@@ -22,7 +23,7 @@ namespace AsyncInn.Controllers
             _hotelRoom = hotelRoom;
         }
 
-        // GET: api/HotelRooms
+        
         [HttpGet]
         [Route("Hotels/{hotelID}/Rooms")]
         public async Task<ActionResult<IEnumerable<HotelRoom>>> GetHotelRooms(int hotelId)
@@ -46,9 +47,7 @@ namespace AsyncInn.Controllers
             return hotelRoom;
         }
 
-        // PUT: api/HotelRooms/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [Authorize(Policy = "Update HotelRooms")]
         [HttpPut]
         [Route("Hotels/{hotelID}/Rooms/{roomNumber}")]
         public async Task<IActionResult> PutHotelRoom(HotelRoom hotelRoom)
@@ -57,9 +56,7 @@ namespace AsyncInn.Controllers
             return Ok(updatedHotelRoom);
         }
 
-        // POST: api/HotelRooms
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [Authorize(Policy = "Create HotelRooms")]
         [HttpPost]
         public async Task<ActionResult<HotelRoom>> PostHotelRoom(HotelRoom hotelRoom)
         {
@@ -68,7 +65,7 @@ namespace AsyncInn.Controllers
             return CreatedAtAction("GetHotelRoom", new { HotelId = hotelRoom.HotelID, RoomID = hotelRoom.HotelID, RoomNumber = hotelRoom.HotelID, PetFriendly = hotelRoom.HotelID, Rate = hotelRoom.HotelID }, hotelRoom);
         }
 
-        // DELETE: api/HotelRooms/5
+        [Authorize(Policy = "Delete HotelRooms")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<HotelRoom>> DeleleHotelRoom(int hotelId, int roomNumber)
         {
@@ -76,6 +73,7 @@ namespace AsyncInn.Controllers
             return NoContent();
         }
 
+        [Authorize(Policy = "Add Room To Hotel")]
         [HttpPost]
         [Route("Hotels{hotelID}/Rooms")]
 

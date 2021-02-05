@@ -14,14 +14,14 @@ using AsyncInn.Models.Interfaces;
 using AsyncInn.Models.Interfaces.Services;
 using AsyncInn.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace AsyncInn
 {
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+      
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,7 +31,6 @@ namespace AsyncInn
             services.AddMvc();
             services.AddControllers();
             services.AddDbContext<AsyncInnDbContext>(options => {
-                // Our DATABASE_URL from js days
                 string connectionString = Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
@@ -56,13 +55,48 @@ namespace AsyncInn
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
-                // There are other options like this
+                
             })
             .AddEntityFrameworkStores<AsyncInnDbContext>();
 
-            
-            }
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
+            services.AddScoped<JwtTokenService>();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+               options.TokenValidationParameters = JwtTokenService.GetValidationParameters(Configuration);
+            });
+            services.AddAuthorization(options =>
+            {
+                
+                options.AddPolicy("Create Hotel", policy => policy.RequireClaim("permissions", "Create Hotel"));
+                options.AddPolicy("See Hotels", policy => policy.RequireClaim("permissions", "See Hotels"));
+                options.AddPolicy("Update Hotel", policy => policy.RequireClaim("permissions", "Update Hotel"));
+                options.AddPolicy("Delete Hotel", policy => policy.RequireClaim("permissions", "Delete Hotel"));
+                options.AddPolicy("Create HotelRoom", policy => policy.RequireClaim("permissions", "Create HotelRoom"));
+                options.AddPolicy("See HotelRooms", policy => policy.RequireClaim("permissions", "See HotelRooms"));
+                options.AddPolicy("Update HotelRooms", policy => policy.RequireClaim("permissions", "Update HotelRooms"));
+                options.AddPolicy("Delete HotelRooms", policy => policy.RequireClaim("permissions", "Delete HotelRooms"));
+                options.AddPolicy("Create Rooms", policy => policy.RequireClaim("permissions", "Create Rooms"));
+                options.AddPolicy("See Rooms", policy => policy.RequireClaim("permissions", "See Rooms"));
+                options.AddPolicy("Update Rooms", policy => policy.RequireClaim("permissions", "Update Rooms"));
+                options.AddPolicy("Delete Rooms", policy => policy.RequireClaim("permissions", "Delete Rooms"));
+                options.AddPolicy("Create Amenity", policy => policy.RequireClaim("permissions", "Create Amenity"));
+                options.AddPolicy("See Amenities", policy => policy.RequireClaim("permissions", "See Amenities"));
+                options.AddPolicy("Add Amenity to Room", policy => policy.RequireClaim("permissions", "Add Amenity to Room"));
+                options.AddPolicy("Delete Amenity From Room", policy => policy.RequireClaim("permissions", "Delete Amenity From Room"));
+                options.AddPolicy("Update Amenity", policy => policy.RequireClaim("permissions", "Update Amenity"));
+                options.AddPolicy("Delete Amenity", policy => policy.RequireClaim("permissions", "Delete Amenity"));
+
+            });
+
+        }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -79,10 +113,13 @@ namespace AsyncInn
                 options.SwaggerEndpoint("/api/v1/swagger.json", "Async Inn");
                 options.RoutePrefix = "";
             });
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+            app.UseAuthentication();
         }
+        
     }
 }
