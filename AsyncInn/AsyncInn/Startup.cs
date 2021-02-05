@@ -75,10 +75,25 @@ namespace AsyncInn
             services.AddAuthorization(options =>
             {
                 
-                options.AddPolicy("create", policy => policy.RequireClaim("permissions", "create"));
-                options.AddPolicy("update", policy => policy.RequireClaim("permissions", "update"));
-                options.AddPolicy("delete", policy => policy.RequireClaim("permissions", "delete"));
-                
+                options.AddPolicy("Create Hotel", policy => policy.RequireClaim("permissions", "Create Hotel"));
+                options.AddPolicy("See Hotels", policy => policy.RequireClaim("permissions", "See Hotels"));
+                options.AddPolicy("Update Hotel", policy => policy.RequireClaim("permissions", "Update Hotel"));
+                options.AddPolicy("Delete Hotel", policy => policy.RequireClaim("permissions", "Delete Hotel"));
+                options.AddPolicy("Create HotelRoom", policy => policy.RequireClaim("permissions", "Create HotelRoom"));
+                options.AddPolicy("See HotelRooms", policy => policy.RequireClaim("permissions", "See HotelRooms"));
+                options.AddPolicy("Update HotelRooms", policy => policy.RequireClaim("permissions", "Update HotelRooms"));
+                options.AddPolicy("Delete HotelRooms", policy => policy.RequireClaim("permissions", "Delete HotelRooms"));
+                options.AddPolicy("Create Rooms", policy => policy.RequireClaim("permissions", "Create Rooms"));
+                options.AddPolicy("See Rooms", policy => policy.RequireClaim("permissions", "See Rooms"));
+                options.AddPolicy("Update Rooms", policy => policy.RequireClaim("permissions", "Update Rooms"));
+                options.AddPolicy("Delete Rooms", policy => policy.RequireClaim("permissions", "Delete Rooms"));
+                options.AddPolicy("Create Amenity", policy => policy.RequireClaim("permissions", "Create Amenity"));
+                options.AddPolicy("See Amenities", policy => policy.RequireClaim("permissions", "See Amenities"));
+                options.AddPolicy("Add Amenity to Room", policy => policy.RequireClaim("permissions", "Add Amenity to Room"));
+                options.AddPolicy("Delete Amenity From Room", policy => policy.RequireClaim("permissions", "Delete Amenity From Room"));
+                options.AddPolicy("Update Amenity", policy => policy.RequireClaim("permissions", "Update Amenity"));
+                options.AddPolicy("Delete Amenity", policy => policy.RequireClaim("permissions", "Delete Amenity"));
+
             });
 
         }
@@ -90,8 +105,6 @@ namespace AsyncInn
             }
 
             app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
             app.UseSwagger(options => {
                 options.RouteTemplate = "/api/{documentName}/swagger.json";
 
@@ -100,11 +113,12 @@ namespace AsyncInn
                 options.SwaggerEndpoint("/api/v1/swagger.json", "Async Inn");
                 options.RoutePrefix = "";
             });
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            
+            app.UseAuthentication();
         }
         
     }
