@@ -14,14 +14,14 @@ using AsyncInn.Models.Interfaces;
 using AsyncInn.Models.Interfaces.Services;
 using AsyncInn.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace AsyncInn
 {
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+      
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,7 +31,6 @@ namespace AsyncInn
             services.AddMvc();
             services.AddControllers();
             services.AddDbContext<AsyncInnDbContext>(options => {
-                // Our DATABASE_URL from js days
                 string connectionString = Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
@@ -56,13 +55,33 @@ namespace AsyncInn
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
-                // There are other options like this
+                
             })
             .AddEntityFrameworkStores<AsyncInnDbContext>();
 
-            
-            }
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
+            services.AddScoped<JwtTokenService>();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+               options.TokenValidationParameters = JwtTokenService.GetValidationParameters(Configuration);
+            });
+            services.AddAuthorization(options =>
+            {
+                
+                options.AddPolicy("create", policy => policy.RequireClaim("permissions", "create"));
+                options.AddPolicy("update", policy => policy.RequireClaim("permissions", "update"));
+                options.AddPolicy("delete", policy => policy.RequireClaim("permissions", "delete"));
+                options.AddPolicy("deposit", policy => policy.RequireClaim("permissions", "deposit"));
+            });
+
+        }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -71,6 +90,8 @@ namespace AsyncInn
             }
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseSwagger(options => {
                 options.RouteTemplate = "/api/{documentName}/swagger.json";
 
@@ -83,6 +104,8 @@ namespace AsyncInn
             {
                 endpoints.MapControllers();
             });
+            
         }
+        
     }
 }

@@ -11,11 +11,14 @@ namespace AsyncInn.Models.Interfaces.Services
     public class IdentityUserService : IUserService
     {
         private UserManager<ApplicationUser> userManager;
+        private JwtTokenService tokenService;
 
-        public IdentityUserService(UserManager<ApplicationUser> manager)
+        public IdentityUserService(UserManager<ApplicationUser> manager, JwtTokenService jwtTokenService)
         {
             userManager = manager;
+            tokenService = jwtTokenService;
         }
+
 
         public async Task<UserDTO> Register(RegisterUser data, ModelStateDictionary modelState)
         {
