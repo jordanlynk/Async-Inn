@@ -78,7 +78,7 @@ namespace AsyncInn
                 options.AddPolicy("create", policy => policy.RequireClaim("permissions", "create"));
                 options.AddPolicy("update", policy => policy.RequireClaim("permissions", "update"));
                 options.AddPolicy("delete", policy => policy.RequireClaim("permissions", "delete"));
-                options.AddPolicy("deposit", policy => policy.RequireClaim("permissions", "deposit"));
+                
             });
 
         }

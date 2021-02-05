@@ -1,5 +1,6 @@
 ﻿using AsyncInn.Models.DTOs;
 using AsyncInn.Models.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -42,6 +43,13 @@ namespace AsyncInn.Controllers
                 return user;
             }
             return Unauthorized();
+        }
+
+        [Authorize(Policy = "update")]
+        [HttpGet("me")]
+        public async Task<ActionResult<UserDTO>> Me()
+        {
+            return await userService.GetUser(this.User);
         }
 
     }

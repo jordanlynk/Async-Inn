@@ -9,6 +9,7 @@ using AsyncInn.Data;
 using AsyncInn.Models;
 using AsyncInn.Models.Interfaces;
 using AsyncInn.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AsyncInn.Controllers
 {
@@ -23,14 +24,14 @@ namespace AsyncInn.Controllers
             _room = room;
         }
 
-        // GET: api/Rooms
+        [Authorize(Policy = "See Rooms")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RoomDTO>>> GetRooms()
         {
             return Ok(await _room.GetRooms());
         }
 
-        // GET: api/Rooms/5
+        [Authorize(Policy = "See Rooms")]
         [HttpGet("{id}")]
         public async Task<ActionResult<RoomDTO>> GetRoom(int id)
         {
@@ -44,9 +45,7 @@ namespace AsyncInn.Controllers
             return room;
         }
 
-        // PUT: api/Rooms/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [Authorize(Policy = "Update Rooms")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRoom(RoomDTO roomDTO)
         {
@@ -56,9 +55,7 @@ namespace AsyncInn.Controllers
 
         }
 
-        // POST: api/Rooms
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [Authorize(Policy = "Create Rooms")]
         [HttpPost]
         public async Task<ActionResult<RoomDTO>> PostRoom(RoomDTO room)
         {
@@ -68,7 +65,7 @@ namespace AsyncInn.Controllers
 
         }
 
-        // DELETE: api/Rooms/5
+        [Authorize(Policy = "Delete Rooms")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Room>> DeleteRoom(int id)
         {
@@ -76,6 +73,7 @@ namespace AsyncInn.Controllers
             return NoContent();
         }
 
+        [Authorize(Policy = "Add Amenity To Room")]
         [HttpPost]
         [Route("{RoomID}/{AmenityID}")]
 
@@ -85,6 +83,7 @@ namespace AsyncInn.Controllers
             return NoContent();
         }
 
+        [Authorize(Policy = "Delete Amenity From Room")]
         [HttpDelete]
         [Route("{RoomID}/{AmenityID}")]
 
