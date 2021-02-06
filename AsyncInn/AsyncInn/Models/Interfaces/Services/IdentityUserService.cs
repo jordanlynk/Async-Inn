@@ -23,7 +23,7 @@ namespace AsyncInn.Models.Interfaces.Services
 
         public async Task<UserDTO> Register(RegisterUser data, ModelStateDictionary modelState)
         {
-            //throw new NotImplementedException();
+            
 
             var user = new ApplicationUser
             {
