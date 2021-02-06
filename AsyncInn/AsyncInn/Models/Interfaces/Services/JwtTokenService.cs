@@ -21,12 +21,22 @@ namespace AsyncInn.Models.Interfaces.Services
         private IConfiguration configuration;
         private SignInManager<ApplicationUser> signInManager;
 
+        /// <summary>
+        /// Gets the validated parameters
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="manager"></param>
         public JwtTokenService(IConfiguration config, SignInManager<ApplicationUser> manager)
         {
             configuration = config;
             signInManager = manager;
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static TokenValidationParameters GetValidationParameters(IConfiguration configuration)
         {
             return new TokenValidationParameters
@@ -37,7 +47,11 @@ namespace AsyncInn.Models.Interfaces.Services
                 ValidateAudience = false,
             };
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         private static SecurityKey GetSecurityKey(IConfiguration configuration)
         {
             var secret = configuration["JWT:Secret"];
@@ -45,7 +59,12 @@ namespace AsyncInn.Models.Interfaces.Services
             var secretBytes = Encoding.UTF8.GetBytes(secret);
             return new SymmetricSecurityKey(secretBytes);
         }
-
+        /// <summary>
+        /// Will get a token 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="expiresIn"></param>
+        /// <returns>the token</returns>
         public async Task<string> GetToken(ApplicationUser user, System.TimeSpan expiresIn)
         {
             var principal = await signInManager.CreateUserPrincipalAsync(user);
